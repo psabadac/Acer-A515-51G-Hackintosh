@@ -2,12 +2,10 @@
 
 # Acer-A515-51G-Hackintosh
 
-[![Join the chat at https://gitter.im/Acer-A515-51G-Hackintosh](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Acer-A515-51G-Hackintosh/community)
-
-#### Supports MacOS 10.15.x, 10.14.x and 10.13.x
+#### Tested with MacOS 10.15.6
 
 <p align="center">
-  <img src="https://i.imgur.com/s5tJPnX.png" alt="Specs">
+  <img src="https://i.imgur.com/OCJ0OE0.png" alt="Specs">
 </p>
 
 
@@ -26,7 +24,7 @@
  - [x] WebCam
  - [x] Usb 3.0 + Type C
  - [x] Sleep From Lid
- - [x] WiFi (2.4 + 5GHz) + BT by using BCM94352z
+ - [x] WiFi by using HeliPort and itlwm.kext
  - [x] Native hotkey support with Fn keys
 
 <p align="center">
@@ -38,63 +36,17 @@
   - - Multi-Core Score : 14837 [Link](https://browser.geekbench.com/v4/cpu/13793813).
   - - GPU OpenCL Score : 31191 [Link](https://browser.geekbench.com/v4/compute/4258348).
 
- ## Warning
- #### **If you don't have any compatible WiFi card installed, then please visit [without-wifi-patches(BCM94352Z) Branch](https://github.com/SiddheshNan/Acer-A515-51G-Hackintosh/tree/without-wifi-patches(BCM94352Z)) of this repo.**
-
 ## Installation
-
- ### BIOS Settings
-* *Security* → Set supervisor password (to disable secure boot)
-* *Security* → Password on boot → **Disable**
-* *Boot* → Secure Boot → **Disable**
-* *Boot* → Boot Mode → **UEFI**
-* *Main* → Touchpad → Set touchpad mode → **Advance**
-* *Main* → Lid Open resume → **Enabled**
-
 
 ###  Basic Installation
 
-- Create a Bootable USB for MacOS by using my [USB Installation Guide](https://github.com/SiddheshNan/Acer-A515-51G-Hackintosh/blob/master/USB-Installation-Guide.md) OR by RehabMan's [[Guide] Booting the OS X installer on LAPTOPS with Clover](https://www.tonymacx86.com/el-capitan-laptop-support/148093-guide-booting-os-x-installer-laptops-clover.html).
-- Install MacOS to SSD / Hard drive. (While installing, connect USB keyboard and mouse because I2C is not supported during installation)
-- Install [Clover Bootloader](https://github.com/CloverHackyColor/CloverBootloader/releases) into SSD / hard drive.
-- Copy **ALL** the Contains of this Repo into **CLOVER** Folder inside the EFI partition of SSD / Hard drive.
-- **[IMPORTANT]** Make sure to Generate system definitions of MacBook pro 15.2 in config.plist file using [Clover Configurator](https://mackie100projects.altervista.org/download-clover-configurator/) or else MacOS will not Boot! You can find Tutorial about it [Here](https://www.tonymacx86.com/threads/guide-how-to-configure-your-systems-smbios-correctly.198155/).
+- Create a Bootable USB for MacOS by using [USB Installation Guide](https://www.tonymacx86.com/threads/unibeast-install-macos-catalina-on-any-supported-intel-based-pc.285366/) using Unibeast & UEFI
+- Copy **ALL** the Contains of this Repo into **CLOVER** Folder inside the EFI partition of USB
 
 ### Post Installation
 
-- Disable Hibernation : Hibernation (suspend to disk or S4 sleep) is not supported on hackintosh. it could cause problems if you don't disable it.
-
-```sh
-
-$ sudo pmset -a hibernatemode 0
-
-$ sudo rm /var/vm/sleepimage
-
-$ sudo mkdir /var/vm/sleepimage
-
-$ sudo pmset -a standby 0
-
-$ sudo pmset -a autopoweroff 0
-
-
-```
-
-- If you have Installed MacOS on SSD, Enable TRIM using following command:
-
-```sh
-
-$ sudo trimforce enable
-
-```
-
-- To fix the cracking sound from headphones, please see [ALCPlugFix](https://github.com/Siddhesh9146/Acer-E515-51G-Hackintosh/tree/master/ALCPlugFix).
-
-
-
-<p align="center">
-<b>⭐ Please consider starring this repository if it helped you! ⭐</b>
-</p>
-
+- Install Multibeast for UEFI
+- - Copy **ALL** the Contains of this Repo into **CLOVER** Folder inside the EFI partition of Hard Drive where you installed the OS
 ---
 ### Laptop configuration
 
@@ -123,24 +75,11 @@ $ sudo trimforce enable
 - **USB** : Custom `SSDT-UIAC.aml` SSDT for `USBInjectAll.kext` that configures USB ports on XHC such that the port limit patch is not needed, and each UsbConnnector value is correct for each port.
 - - You can also find USB port mapping for `SSDT-UIAC` [Here](https://github.com/SiddheshNan/Acer-A515-51G-Hackintosh/blob/master/USB%20port%20mapping%20for%20SSDT-UIAC.md).
 
+- **Wi-Fi** : Stock WiFi Card is `Intel Wireless AC 3168` 
+- - It supported using **OpenIntelWireless** with [heliport](https://github.com/OpenIntelWireless/HeliPort) and [itlwm](https://github.com/OpenIntelWireless/itlwm)
 
-- **Wi-Fi** : Stock WiFi Card is `Atheros QCA9377` It is not supported on MacOS.
-- - Best Choice will be to replace current Card with `BCM94352Z` which has WiFi+BT, or . You can find it on AliExpress for like $20-30. I Have already changed my current WiFi card with `BCM94352Z (Lenovo's 04x6020)`.
-- - This `BCM94352Z` card comes from 2 manufacturer called:
-- - - 1. DELL - mainly called `DW1560` - has `A key NGFF notch` - much expensive
-- - - 2. Lenovo - mainly called `04x6020` - has `E key NGFF notch` - not so expensive
-- - The Dell's `DW1560` is much expensive and is only recommended for laptops with `A key NGFF notch` & also laptops which have whitelisted cards from certain vendors.
-- - On the other hand Lenovo's `04x6020` has `E key NGFF` notch and is much cheaper than `DW1560`.
-- - **This laptop supports both & you are free to choose between the two.**
-- - Keep in mind, this laptop uses **M.2(NGFF)** Socket with **A+E Key**. Half size card won't work.
-- - Config.plist is already patched for `BCM94352Z` and `BCM943602BAED` & added kexts for BT as well.
-- - **If You Don't Have Compatible WiFi Card Installed then Please visit [without-wifi-patches(BCM94352Z) Branch](https://github.com/SiddheshNan/Acer-A515-51G-Hackintosh/tree/without-wifi-patches(BCM94352Z)) of this Repo.**
-
-- **Bluetooth** : Stock `Atheros QCA9377` BT will work out-of-the box, But you can't turn it off because BT power management is not supported;
-- - To Fix this you'll have to get a MacOS compatible WiFi+BT card. The best choice will be `BCM94352Z` which has WiFi+BT.
-
+- **Bluetooth** : Stock `Intel Wireless AC 3168` BT will work out-of-the box.
 - **SD Card Reader** : Internal SD Card Support using Modified Sinetek's rtsx Driver.
-
 
 ## Credits
 
@@ -152,3 +91,4 @@ $ sudo trimforce enable
 - Thanks to [Sinetek](https://github.com/sinetek) for [Sinetek-rtsx](https://github.com/sinetek/Sinetek-rtsx).
 - Thanks to [al3xtjames](https://github.com/al3xtjames) for [NoTouchID](https://github.com/al3xtjames/NoTouchID).
 - Thanks to [daliansky](https://github.com/daliansky/) for Some Patches which I used here from [XiaoMi-Pro](https://github.com/daliansky/XiaoMi-Pro/).
+- Thanks to [OpenIntelWireess](https://github.com/OpenIntelWireless) working on wireless patches

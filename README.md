@@ -1,6 +1,6 @@
 
 
-# Acer-A515-51G-Hackintosh
+# Acer-A515-51G-51D3-Hackintosh
 
 #### Tested with MacOS 10.15.6
 
